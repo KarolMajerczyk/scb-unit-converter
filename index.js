@@ -1,4 +1,4 @@
-const convertInput = document.querySelector("#convert-input");
+const converterInput = document.querySelector("#convert-input");
 const convertBtn = document.querySelector("#convert-btn");
 const converterOutput = document.querySelector(".converter-output");
 
@@ -25,55 +25,47 @@ const physicalProperties = {
 
 const converter = ["length", "mass", "volume"];
 
-convertBtn.addEventListener("click", renderConversionItems);
+converterInput.addEventListener("input", () => {
+  converterInput.value = converterInput.value.replace(/[^\d.]/g, "");
+});
 
-function renderConversionItems() {
-  const inputValue = convertInput.value;
+convertBtn.addEventListener("click", renderProperties);
+
+function renderProperties() {
+  const propertyValue = converterInput.value;
 
   let html = "";
 
   for (let i = 0; i < converter.length; i++) {
-    const conversionItem = createConversionItem(
+    const propertyItem = createPropertyItem(
       physicalProperties[converter[i]],
-      inputValue
+      propertyValue
     );
 
-    html += conversionItem;
+    html += propertyItem;
   }
 
   converterOutput.innerHTML = html;
 }
 
-function createConversionItem(conversionType, conversionValue) {
-  const metricToImperial = conversionValue * conversionType["factor"];
-  const imperialToMetric = conversionValue / conversionType["factor"];
+function createPropertyItem(property, value) {
+  const metricToImperial = value * property["factor"];
+  const imperialToMetric = value / property["factor"];
 
   let html = `
     <div class="property-box">
-        <p class="property-name">${conversionType["name"]}</span></p>
+        <p class="property-name">${property.name}</span></p>
         <p class="property-conversion">
             <span>
-                ${formatConversionOutput(
-                  conversionValue,
-                  conversionType["metricUnit"]
-                )}
+                ${formatOutput(value, property.metricUnit)}
                 =
-                ${formatConversionOutput(
-                  imperialToMetric,
-                  conversionType["imperialUnit"]
-                )}
+                ${formatOutput(imperialToMetric, property.imperialUnit)}
             </span>
             |
             <span>
-                ${formatConversionOutput(
-                  conversionValue,
-                  conversionType["imperialUnit"]
-                )}
+                ${formatOutput(value, property.imperialUnit)}
               =
-                ${formatConversionOutput(
-                  metricToImperial,
-                  conversionType["metricUnit"]
-                )}
+                ${formatOutput(metricToImperial, property.metricUnit)}
             </span>
         </p>
     </div>`;
@@ -81,17 +73,15 @@ function createConversionItem(conversionType, conversionValue) {
   return html;
 }
 
-function formatConversionOutput(value, type) {
+function formatOutput(value, unit) {
   let formatedValue = parseFloat(Number(value).toFixed(3).toString());
-  let formatedUnitName = type;
+  let formattedUnit = unit;
 
-  if (type === "foot" && value > 1) {
-    formatedUnitName = "feet";
-  } else if (value > 1) {
-    formatedUnitName = type + "s";
+  if (unit === "foot" && Number(value) > 1) {
+    formattedUnit = "feet";
+  } else if (value > 1 || (Number(value) === 0 && unit !== "foot")) {
+    formattedUnit = unit + "s";
   }
 
-  return `${formatedValue} ${formatedUnitName}`;
+  return `${formatedValue} ${formattedUnit}`;
 }
-
-function switchTheme() {}

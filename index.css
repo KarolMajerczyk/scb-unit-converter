@@ -162,8 +162,7 @@ body {
 #convert-btn {
   background: var(--clr-secondary-600);
   color: inherit;
-  padding: 10px 20px;
-  border-radius: 50px;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -172,12 +171,22 @@ body {
 #convert-input {
   outline: none;
   text-align: center;
+  padding: 5px 20px 15px 20px;
+
   width: clamp(10px, 80%, 300px);
+
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
 }
 
 #convert-input::placeholder {
   color: var(--clr-neutral-100);
   font-size: var(--fs-500);
+}
+
+#convert-btn {
+  border-radius: 25%;
+  padding: 10px 20px;
 }
 
 #convert-btn:hover {
